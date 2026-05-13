@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Deepfake Detection System</title>
+    <!-- Google Fonts for Futuristic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Link to CSS (In Flask, you might use {{ url_for('static', filename='style.css') }}) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <!-- Newspaper / Fake News Background Layer -->
+    <div class="newspaper-bg"></div>
+    <div class="bg-overlay"></div>
+    <!-- Particle Background (CSS driven) -->
+    <div id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass-panel">
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i> TruthGuard AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Deepfakes</a></li>
+            <li><a href="#tech">Technology</a></li>
+            <li><a href="#stats">Impact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero & Upload Section -->
+        <section id="home" class="hero-section">
+            <div class="hero-content fade-in">
+                <div class="shield-icon pulse">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h1 class="glitch" data-text="AI Deepfake Detection System">AI Deepfake Detection System</h1>
+                <p class="subtitle">Detecting Truth in the Age of AI. Advanced neural networks engineered to combat morphed imagery and synthetic media misinformation.</p>
+
+                <div class="upload-container glass-panel">
+                    <!-- Flask Compatible Form -->
+                    <form action="/predict" method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <div class="drop-zone" id="dropZone">
+                            <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                            <span class="drop-text">Drag & Drop Image or Click to Browse</span>
+                            <input type="file" name="file" id="fileInput" accept="image/*" required>
+                        </div>
+                        <div class="file-info" id="fileInfo">No file selected</div>
+                        <button type="submit" class="cyber-btn" id="detectBtn">
+                            <i class="fa-solid fa-microchip"></i> Run Analysis
+                        </button>
+                    </form>
+
+                    <!-- Loading Animation (Hidden by default) -->
+                    <div class="loader-container" id="loader">
+                        <div class="scanner"></div>
+                        <p>Analyzing facial artifacts & pixel anomalies...</p>
+                    </div>
+                </div>
+
+                <!-- JINJA: Result Display Section -->
+                {% if result %}
+                <div class="result-card glass-panel {% if result|upper == 'FAKE' %}glow-red{% else %}glow-green{% endif %} fade-in" id="resultSection">
+                    <h3>Analysis Complete</h3>
+                    <div class="result-status">
+                        {% if result|upper == 'FAKE' %}
+                        <i class="fa-solid fa-triangle-exclamation"></i> MANIPULATED MEDIA DETECTED {% else %}
+                        <i class="fa-solid fa-circle-check"></i> AUTHENTIC MEDIA {% endif %}
+                    </div>
+                    <div class="confidence-wrapper">
+                        <div class="confidence-label">
+                            <span>Confidence Score</span>
+                            <span>{{ confidence }}%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar {% if result|upper == 'FAKE' %}bg-red{% else %}bg-green{% endif %}" style="width: {{ confidence }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- About Deepfakes & Cybercrime Awareness -->
+        <section id="about" class="grid-section fade-in">
+            <div class="text-card glass-panel">
+                <h2 class="section-title"><i class="fa-solid fa-masks-theater text-red"></i> The Deepfake Threat</h2>
+                <p>Deepfakes utilize malicious artificial intelligence to map human faces and synthesize fake video/audio. From morphed celebrity videos to high-level corporate fraud, manipulated media is the weapon of choice for modern cybercriminals.</p>
+                <div class="warning-box">
+                    <i class="fa-solid fa-skull-crossbones"></i> Cybercrime Alert: 400% increase in AI-generated identity theft in the last year.
+                </div>
+            </div>
+            <div class="text-card glass-panel">
+                <h2 class="section-title"><i class="fa-solid fa-bullseye text-cyan"></i> Why Detection Matters</h2>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check text-cyan"></i> <b>Protecting Identity:</b> Preventing unauthorized facial recreation.</li>
+                    <li><i class="fa-solid fa-check text-cyan"></i> <b>Combating Misinformation:</b> Stopping the spread of fake news.</li>
+                    <li><i class="fa-solid fa-check text-cyan"></i> <b>Securing Finance:</b> Blocking KYC fraud and social engineering.</li>
+                    <li><i class="fa-solid fa-check text-cyan"></i> <b>Restoring Trust:</b> Verifying digital evidence in real-time.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- AI Technologies -->
+        <section id="tech" class="tech-section fade-in">
+            <h2 class="section-title center">AI-Powered Media Authenticity Verification</h2>
+            <div class="cards-container">
+                <div class="tech-card glass-panel">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <h3>Convolutional Neural Networks</h3>
+                    <p>Extracting spatial frame artifacts and blending boundaries invisible to the human eye.</p>
+                </div>
+                <div class="tech-card glass-panel">
+                    <i class="fa-solid fa-eye"></i>
+                    <h3>Frequency Analysis</h3>
+                    <p>Detecting anomalies in the Fourier domain caused by GAN (Generative Adversarial Network) synthesis.</p>
+                </div>
+                <div class="tech-card glass-panel">
+                    <i class="fa-solid fa-fingerprint"></i>
+                    <h3>Biological Signals</h3>
+                    <p>Analyzing micro-expressions, heartbeat (rPPG), and unnatural eye-blinking patterns.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section id="stats" class="stats-section fade-in">
+            <div class="stat-box glass-panel">
+                <div class="stat-number" data-target="99.8">0</div><span class="stat-symbol">%</span>
+                <p>Detection Accuracy</p>
+            </div>
+            <div class="stat-box glass-panel">
+                <div class="stat-number" data-target="150">0</div><span class="stat-symbol">K+</span>
+                <p>Media Scanned</p>
+            </div>
+            <div class="stat-box glass-panel">
+                <div class="stat-number" data-target="0.4">0</div><span class="stat-symbol">s</span>
+                <p>Processing Time</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content glass-panel">
+            <p>&copy; 2026 TruthGuard AI. All rights reserved.</p>
+            <p class="disclaimer">For educational, research, and enterprise security purposes.</p>
+        </div>
+    </footer>
+
+    <!-- Link to JS (In Flask: {{ url_for('static', filename='script.js') }}) -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
